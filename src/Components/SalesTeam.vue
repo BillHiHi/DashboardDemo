@@ -12,60 +12,95 @@
     </div>
 
     <!-- TEAM GRID/TABLE -->
-    <div class="card">
-      <div class="table-responsive">
-        <table class="modern-table">
-          <thead>
-            <tr>
-              <th>Nhân viên</th>
-              <th>Vị trí</th>
-              <th>Liên hệ</th>
-              <th>Trạng thái</th>
-              <th class="text-end">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="member in team" :key="member.id">
-              <td>
-                <div class="user-info">
-                  <div class="avatar">{{ getInitials(member.name) }}</div>
-                  <div class="info-text">
-                    <span class="name">{{ member.name }}</span>
-                    <span class="id-text">ID: #{{ member.id }}</span>
+    <div class="content-view">
+      <!-- Desktop Table -->
+      <div class="card desktop-only">
+        <div class="table-responsive">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Nhân viên</th>
+                <th>Vị trí</th>
+                <th>Liên hệ</th>
+                <th>Trạng thái</th>
+                <th class="text-end">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="member in team" :key="member.id">
+                <td>
+                  <div class="user-info">
+                    <div class="avatar">{{ getInitials(member.name) }}</div>
+                    <div class="info-text">
+                      <span class="name">{{ member.name }}</span>
+                      <span class="id-text">ID: #{{ member.id }}</span>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td>
-                <span class="role-badge" :class="getRoleClass(member.role)">{{ member.role }}</span>
-              </td>
-              <td class="text-muted">
-                <div class="contact-info">
-                  <i class="bi bi-envelope"></i> {{ member.email }}
-                </div>
-                <div class="contact-info">
-                  <i class="bi bi-telephone"></i> {{ member.phone }}
-                </div>
-              </td>
-              <td>
-                <span class="status-badge" :class="member.status === 'Active' ? 'active' : 'inactive'">
-                  {{ member.status === 'Active' ? 'Đang hoạt động' : 'Đã nghỉ' }}
-                </span>
-              </td>
-              <td class="text-end">
-                <button class="btn-icon edit" @click="openEdit(member)" title="Sửa">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="btn-icon delete" @click="deleteMember(member.id)" title="Xóa">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr v-if="team.length === 0">
-              <td colspan="5" class="empty-state">Chưa có nhân viên nào</td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td>
+                  <span class="role-badge" :class="getRoleClass(member.role)">{{ member.role }}</span>
+                </td>
+                <td class="text-muted">
+                  <div class="contact-info">
+                    <i class="bi bi-envelope"></i> {{ member.email }}
+                  </div>
+                  <div class="contact-info">
+                    <i class="bi bi-telephone"></i> {{ member.phone }}
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge" :class="member.status === 'Active' ? 'active' : 'inactive'">
+                    {{ member.status === 'Active' ? 'Đang hoạt động' : 'Đã nghỉ' }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button class="btn-icon edit" @click="openEdit(member)" title="Sửa">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button class="btn-icon delete" @click="deleteMember(member.id)" title="Xóa">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- Mobile Card List -->
+      <div class="mobile-team-list mobile-only">
+        <div v-for="member in team" :key="member.id" class="member-card">
+          <div class="card-header">
+            <div class="user-info">
+              <div class="avatar">{{ getInitials(member.name) }}</div>
+              <div class="info-text">
+                <span class="name">{{ member.name }}</span>
+                <span class="id-text">ID: #{{ member.id }}</span>
+              </div>
+            </div>
+            <span class="status-badge" :class="member.status === 'Active' ? 'active' : 'inactive'"></span>
+          </div>
+          <div class="card-body">
+            <div class="role-info">
+              <span class="role-badge" :class="getRoleClass(member.role)">{{ member.role }}</span>
+            </div>
+            <div class="contact-details">
+              <div class="contact-item"><i class="bi bi-envelope"></i> {{ member.email }}</div>
+              <div class="contact-item"><i class="bi bi-telephone"></i> {{ member.phone }}</div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn-action edit" @click="openEdit(member)">
+              <i class="bi bi-pencil-square"></i> Chỉnh sửa
+            </button>
+            <button class="btn-action delete" @click="deleteMember(member.id)">
+              <i class="bi bi-trash"></i> Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="team.length === 0" class="empty-state">Chưa có nhân viên nào</div>
     </div>
 
     <!-- MODAL -->
@@ -236,20 +271,115 @@ function getRoleClass(role) {
 .btn-add:hover { background: #2563eb; transform: translateY(-1px); }
 
 @media (max-width: 768px) {
+  .sales-team-page { padding: 16px; padding-bottom: 40px; }
   .page-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    text-align: center;
+    gap: 16px;
+    margin-bottom: 24px;
   }
   .btn-add {
     width: 100%;
     justify-content: center;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 15px;
   }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+
+  .modal-content {
+    width: 100%;
+    height: auto;
+    border-radius: 24px 24px 0 0;
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    padding: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .modal-overlay { align-items: flex-end; }
 }
 
 /* TABLE CARD */
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
 .card {
   background: white; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;
 }
+
+/* MOBILE TEAM LIST */
+.mobile-team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.member-card {
+  background: white;
+  border-radius: 24px;
+  padding: 20px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.member-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.member-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.member-card .contact-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.member-card .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.member-card .card-footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-action {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-action.edit { background: #eff6ff; color: #3b82f6; }
+.btn-action.delete { background: #fef2f2; color: #ef4444; }
+
+/* TABLE RESPONSIVE */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
@@ -265,12 +395,12 @@ function getRoleClass(role) {
 
 .user-info { display: flex; align-items: center; gap: 12px; }
 .user-info .avatar {
-  width: 40px; height: 40px; background: #eff6ff; color: #3b82f6;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px;
+  width: 44px; height: 44px; background: #eff6ff; color: #3b82f6;
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 15px;
 }
 .info-text { display: flex; flex-direction: column; }
-.info-text .name { font-weight: 600; color: #1e293b; }
+.info-text .name { font-weight: 700; color: #0f172a; }
 .info-text .id-text { font-size: 11px; color: #94a3b8; }
 
 .role-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }

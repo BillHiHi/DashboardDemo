@@ -223,13 +223,14 @@ const isMobileMenuOpen = ref(false)
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: calc(70px + env(safe-area-inset-bottom, 0px));
   background: #ffffff;
   border-top: 1px solid #e2e8f0;
   z-index: 1000;
   justify-content: space-around;
-  align-items: center;
-  padding: 0 10px;
+  align-items: flex-start; /* Align to top to give space for status bar/bottom bar */
+  padding: 10px 10px calc(env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .bottom-nav-item {
@@ -237,23 +238,29 @@ const isMobileMenuOpen = ref(false)
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: #94a3b8; /* Lighter color for inactive */
   text-decoration: none;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
   gap: 4px;
   flex: 1;
-  transition: all 0.2s;
+  height: 50px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bottom-nav-item i {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .bottom-nav-item.router-link-active {
   color: #3b82f6;
   background: none !important;
   box-shadow: none !important;
+  transform: translateY(-2px);
+}
+
+.bottom-nav-item.router-link-active span {
+  font-weight: 800;
 }
 
 /* MOBILE HEADER & ADAPTATIONS */
@@ -262,7 +269,7 @@ const isMobileMenuOpen = ref(false)
 @media (max-width: 1024px) {
   .sidebar-fixed {
     transform: translateX(-100%);
-    width: 260px;
+    width: 280px;
   }
   
   .sidebar-fixed.mobile-open {
@@ -271,26 +278,31 @@ const isMobileMenuOpen = ref(false)
 
   .main-wrapper {
     margin-left: 0;
-    padding: 20px;
-    padding-top: 80px;
-    padding-bottom: 90px;
+    padding: 16px; /* Reduced side padding for more screen space */
+    padding-top: 70px; /* Reduced top padding */
+    padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px));
   }
 
   .mobile-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
+    padding: 0 20px;
+    height: 60px;
     background: #ffffff;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 900;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #f1f5f9;
   }
 
-  .brand-logo { color: #0f172a; font-size: 18px; }
+  .brand-logo { 
+    color: #0f172a; 
+    font-size: 18px; 
+    font-weight: 900;
+  }
 
   .bottom-nav { display: flex; }
 
@@ -299,14 +311,15 @@ const isMobileMenuOpen = ref(false)
   .mini-avatar {
     width: 32px;
     height: 32px;
-    background: #3b82f6;
-    color: white;
-    border-radius: 8px;
+    background: #eff6ff;
+    color: #3b82f6;
+    border: 2px solid #3b82f6;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
   }
 
   .profile-btn {

@@ -76,7 +76,9 @@
         <div class="card-header">
           <h3>Lịch sử nhập liệu</h3>
         </div>
-        <div class="table-responsive">
+        
+        <!-- Desktop Table -->
+        <div class="table-responsive desktop-only">
           <table class="modern-table">
             <thead>
               <tr>
@@ -97,12 +99,28 @@
                 <td class="text-end font-bold text-green">{{ formatCurrency(sale.revenue) }}</td>
                 <td class="text-end text-muted">{{ formatDate(sale.date) }}</td>
               </tr>
-              <tr v-if="sales.length === 0">
-                <td colspan="5" class="text-center text-muted p-4">Chưa có dữ liệu nào</td>
-              </tr>
             </tbody>
           </table>
         </div>
+
+        <!-- Mobile History Cards -->
+        <div class="mobile-history-list mobile-only">
+          <div v-for="sale in sortedSales" :key="sale.id" class="history-card">
+            <div class="card-row">
+              <span class="staff-name">{{ sale.staffName }}</span>
+              <span class="date">{{ formatDate(sale.date) }}</span>
+            </div>
+            <div class="card-row main">
+              <span class="product-name">{{ sale.product }}</span>
+              <span class="total-price">{{ formatCurrency(sale.revenue) }}</span>
+            </div>
+            <div class="card-row sub">
+              <span>{{ formatCurrency(sale.unitPrice) }} × {{ sale.quantity }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="sales.length === 0" class="empty-state">Chưa có dữ liệu nào</div>
       </div>
     </div>
 
@@ -317,31 +335,81 @@ function getInitials(name) {
   display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px;
 }
 
+/* RESPONSIVE */
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
 @media (max-width: 1200px) {
   .content-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
+  .revenue-report { padding: 16px; padding-bottom: 40px; }
   .page-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    text-align: center;
+    gap: 16px;
+    margin-bottom: 24px;
   }
   .btn-add {
     width: 100%;
     justify-content: center;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 15px;
   }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+
+  .kpi-grid { grid-template-columns: 1fr; gap: 12px; }
+  .kpi-card { padding: 20px; border-radius: 20px; }
+  .kpi-icon { font-size: 32px; }
+
+  .ranking-item { padding: 16px; gap: 12px; }
+  .rank-badge { width: 20px; height: 20px; font-size: 10px; }
+  .avatar { width: 28px; height: 28px; font-size: 10px; }
+  .name { font-size: 13px; }
+  .stats-text strong { font-size: 13px; }
+  
+  .history-card {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .history-card:last-child { border-bottom: none; }
+  
+  .card-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .card-row.main { margin: 8px 0; }
+  .staff-name { font-size: 13px; font-weight: 700; color: #3b82f6; }
+  .date { font-size: 11px; color: #94a3b8; }
+  .product-name { font-size: 15px; font-weight: 800; color: #0f172a; }
+  .total-price { font-size: 15px; font-weight: 800; color: #10b981; }
+  .card-row.sub { font-size: 12px; color: #64748b; font-weight: 600; }
+
+  .modal-content {
+    width: 100%;
+    height: auto;
+    border-radius: 24px 24px 0 0;
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    padding: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .modal-overlay { align-items: flex-end; }
 }
 
 .card {
-  background: white; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;
+  background: white; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); overflow: hidden;
+  border: 1px solid #f1f5f9;
 }
 .card-header { padding: 20px; border-bottom: 1px solid #f1f5f9; }
-.card-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #1e293b; }
+.card-header h3 { margin: 0; font-size: 16px; font-weight: 800; color: #0f172a; }
 
 /* LEADERBOARD */
-.ranking-list { padding: 10px 0; }
+.ranking-list { padding: 0; }
 .ranking-item {
-  display: flex; flex-direction: row; align-items: flex-start; padding: 20px; gap: 16px;
+  display: flex; flex-direction: row; align-items: center; padding: 20px; gap: 16px;
   border-bottom: 1px solid #f8fafc; transition: background 0.2s;
 }
 .ranking-item:hover { background: #f8fafc; }
@@ -356,25 +424,24 @@ function getInitials(name) {
 .top-2 .rank-badge { background: #e0f2fe; color: #0369a1; }
 .top-3 .rank-badge { background: #f3e8ff; color: #7e22ce; }
 
-.member-content { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-.member-top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.member-content { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.member-top-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 
 .avatar {
-  width: 32px; height: 32px; background: #f1f5f9; color: #64748b;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 11px;
+  width: 36px; height: 36px; background: #eff6ff; color: #3b82f6;
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
 }
-.name { font-weight: 700; font-size: 14px; color: #1e293b; }
+.name { font-weight: 700; font-size: 14px; color: #0f172a; }
 
 .stats-text { text-align: right; display: flex; flex-direction: column; }
-.stats-text small { font-size: 11px; color: #64748b; }
-.stats-text strong { font-size: 14px; color: #1e293b; }
+.stats-text small { font-size: 11px; color: #94a3b8; font-weight: 700; }
+.stats-text strong { font-size: 14px; font-weight: 800; color: #0f172a; }
 
 .progress-bar-wrapper { width: 100%; }
-.progress-bar { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+.progress-bar { width: 100%; height: 6px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
 .progress-bar .fill { height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.3s ease; }
 .top-1 .fill { background: #f59e0b; }
-.top-2 .fill { background: #3b82f6; }
 .top-3 .fill { background: #8b5cf6; }
 
 /* HISTORY TABLE */
@@ -386,15 +453,19 @@ function getInitials(name) {
 .modern-table { width: 100%; border-collapse: collapse; min-width: 600px; }
 .min-w-100 { min-width: 100px; }
 .modern-table th {
-  text-align: left; background: #f8fafc; padding: 12px 16px;
-  font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+  text-align: left; background: #f8fafc; padding: 16px;
+  font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;
 }
-.modern-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-.product-tag { background: #f0fdf4; color: #166534; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+.modern-table td { padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+.product-tag { background: #f0fdf4; color: #166534; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+
+.empty-state { text-align: center; color: #94a3b8; padding: 60px 20px; font-weight: 700; font-size: 14px; }
+
 .text-end { text-align: right; }
-.font-bold { font-weight: 600; }
+.font-bold { font-weight: 700; }
 .text-green { color: #10b981; }
 .text-muted { color: #94a3b8; }
+.text-center { text-align: center; }
 
 /* MODAL & FORM */
 .modal-overlay {
@@ -421,7 +492,7 @@ function getInitials(name) {
 .form-group.half { flex: 1; }
 .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #334155; }
 .form-group input, .form-group select {
-  width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: #f8fafc;
+  width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 14px; background: #f8fafc;
   box-sizing: border-box;
 }
 .form-group input:focus, .form-group select:focus {
@@ -431,8 +502,8 @@ function getInitials(name) {
 .btn-cancel { background: #f1f5f9; color: #64748b; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
 .total-preview {
   background: #f0fdf4;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 16px;
+  border-radius: 12px;
   border: 1px dashed #10b981;
   display: flex;
   justify-content: space-between;
@@ -443,11 +514,9 @@ function getInitials(name) {
   color: #10b981;
 }
 .price-display {
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 900;
   color: #15803d;
 }
-.text-center { text-align: center; }
-.btn-save { background: #3b82f6; color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
-
+.btn-save { background: #3b82f6; color: white; padding: 12px 24px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; }
 </style>

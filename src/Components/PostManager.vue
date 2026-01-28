@@ -34,53 +34,80 @@
       </div>
     </div>
 
-    <!-- TABLE -->
-    <div class="table-container">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>Nhân viên</th>
-            <th>Nền tảng</th>
-            <th>Ngày đăng</th>
-            <th>Trạng thái</th>
-            <th class="text-end">Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="post in filteredPosts" :key="post.id">
-            <td>
-              <div class="user-info">
-                <div class="avatar">{{ getInitials(post.userName) }}</div>
+    <!-- TABLE / CARD LIST -->
+    <div class="content-view">
+      <!-- Desktop Table -->
+      <div class="table-container desktop-only">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Nhân viên</th>
+              <th>Nền tảng</th>
+              <th>Ngày đăng</th>
+              <th>Trạng thái</th>
+              <th class="text-end">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="post in filteredPosts" :key="post.id">
+              <td>
+                <div class="user-info">
+                  <div class="avatar">{{ getInitials(post.userName) }}</div>
+                  <span class="username">{{ post.userName }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="platform-badge" :class="post.platform.toLowerCase()">
+                  {{ post.platform }}
+                </span>
+              </td>
+              <td class="text-muted">{{ formatDate(post.date) }}</td>
+              <td>
+                <span class="status-badge" :class="post.status.toLowerCase()">
+                  {{ post.status === 'Published' ? 'Đã đăng' : post.status === 'Draft' ? 'Bản nháp' : 'Đã lên lịch' }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn-icon edit" @click="openEdit(post)" title="Sửa">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn-icon delete" @click="deletePost(post.id)" title="Xóa">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Card List -->
+      <div class="mobile-card-list mobile-only">
+        <div v-for="post in filteredPosts" :key="post.id" class="post-card">
+          <div class="card-header">
+            <div class="user-info">
+              <div class="avatar">{{ getInitials(post.userName) }}</div>
+              <div class="info-text">
                 <span class="username">{{ post.userName }}</span>
+                <span class="date text-muted">{{ formatDate(post.date) }}</span>
               </div>
-            </td>
-            <td>
-              <span class="platform-badge" :class="post.platform.toLowerCase()">
-                {{ post.platform }}
-              </span>
-            </td>
-            <td class="text-muted">{{ formatDate(post.date) }}</td>
-            <td>
-              <span class="status-badge" :class="post.status.toLowerCase()">
-                {{ post.status === 'Published' ? 'Đã đăng' : post.status === 'Draft' ? 'Bản nháp' : 'Đã lên lịch' }}
-              </span>
-            </td>
-            <td class="text-end">
-              <button class="btn-icon edit" @click="openEdit(post)" title="Sửa">
-                <i class="bi bi-pencil-square"></i>
-              </button>
-              <button class="btn-icon delete" @click="deletePost(post.id)" title="Xóa">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          </tr>
-          <tr v-if="filteredPosts.length === 0">
-            <td colspan="5" class="empty-state">
-              Không tìm thấy bài đăng nào phù hợp
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+            <div class="actions">
+              <button class="btn-icon edit" @click="openEdit(post)"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn-icon delete" @click="deletePost(post.id)"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="platform-badge" :class="post.platform.toLowerCase()">{{ post.platform }}</span>
+            <span class="status-badge" :class="post.status.toLowerCase()">
+              {{ post.status === 'Published' ? 'Đã đăng' : post.status === 'Draft' ? 'Bản nháp' : 'Đã lên lịch' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="filteredPosts.length === 0" class="empty-state">
+        Không tìm thấy bài đăng nào phù hợp
+      </div>
     </div>
 
     <!-- MODAL -->
@@ -331,39 +358,7 @@ function getInitials(name) {
   cursor: pointer;
 }
 
-/* TABLE */
-.table-container {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.modern-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 700px;
-}
-.modern-table th {
-  background: #f8fafc;
-  text-align: left;
-  padding: 16px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.modern-table td {
-  padding: 16px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 14px;
-  vertical-align: middle;
-}
-.modern-table tr:hover {
-  background: #f8fafc;
-}
-
+/* SHARED STYLES */
 .user-info {
   display: flex;
   align-items: center;
@@ -382,74 +377,168 @@ function getInitials(name) {
   font-size: 12px;
 }
 .username {
-  font-weight: 600;
-  color: #1e293b;
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .platform-badge {
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: 20px;
-  font-weight: 600;
-  font-size: 12px;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
 }
 .platform-badge.tiktok { background: #000; color: #fff; }
-.platform-badge.facebook { background: #e7f5ff; color: #1877f2; }
-.platform-badge.instagram { background: #fce7f3; color: #d946ef; }
-.platform-badge.youtube { background: #fee2e2; color: #ef4444; }
+.platform-badge.facebook { background: #eff6ff; color: #1877f2; }
+.platform-badge.instagram { background: #fdf2f8; color: #db2777; }
+.platform-badge.youtube { background: #fef2f2; color: #dc2626; }
 
 .status-badge {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
 }
-.published {
-  background: #dcfce7;
-  color: #166534;
-}
-.draft {
-  background: #f1f5f9;
-  color: #475569;
-}
-.scheduled {
-  background: #fff7ed;
-  color: #c2410c;
-}
+.published { background: #dcfce7; color: #15803d; }
+.draft { background: #f1f5f9; color: #475569; }
+.scheduled { background: #fef3c7; color: #b45309; }
 
 .btn-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  margin-left: 6px;
 }
 .btn-icon.edit { background: #eff6ff; color: #3b82f6; }
-.btn-icon.edit:hover { background: #3b82f6; color: white; }
-.btn-icon.delete { background: #fee2e2; color: #ef4444; }
-.btn-icon.delete:hover { background: #ef4444; color: white; }
+.btn-icon.delete { background: #fef2f2; color: #ef4444; }
 
 .empty-state {
   text-align: center;
-  color: #94a3b8;
-  padding: 40px;
+  color: #64748b;
+  padding: 60px 20px;
+  background: #f8fafc;
+  border-radius: 20px;
+  margin-top: 20px;
 }
 
-.text-muted { color: #64748b; }
+.text-muted { color: #94a3b8; }
 .text-end { text-align: right; }
+
+/* TABLE */
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+.table-container {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table th {
+  background: #f8fafc;
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.modern-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* MOBILE CARD LIST */
+.mobile-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-card {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.post-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.post-card .info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.post-card .username { font-size: 14px; }
+.post-card .date { font-size: 12px; }
+
+.post-card .card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .post-manager { padding: 20px; }
-  .manager-header { flex-direction: column; align-items: flex-start; }
-  .btn-add { width: 100%; justify-content: center; }
-  .toolbar { flex-direction: column; align-items: stretch; }
-  .filters { flex-direction: column; }
+  .post-manager { padding: 16px; padding-bottom: 40px; }
+  .manager-header { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 16px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .btn-add { 
+    width: 100%; 
+    justify-content: center; 
+    height: 50px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+  .toolbar { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 12px;
+    margin-bottom: 24px;
+  }
   .search-box { max-width: none; }
+  .search-box input { height: 48px; border-radius: 12px; }
+  .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .filters select { width: 100%; height: 48px; border-radius: 12px; }
+
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+
+  .modal-content {
+    width: 100%;
+    height: auto;
+    border-radius: 24px 24px 0 0;
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    padding: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .modal-overlay { align-items: flex-end; }
 }
 
 /* MODAL & FORM STYLES */

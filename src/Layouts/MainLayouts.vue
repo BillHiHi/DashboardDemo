@@ -22,17 +22,17 @@
         </div>
       </div>
 
-      <nav class="sidebar-nav desktop-only">
-        <router-link to="/" class="nav-item">
+      <nav class="sidebar-nav">
+        <router-link to="/" class="nav-item" @click="isMobileMenuOpen = false">
           <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
         </router-link>
-        <router-link to="/posts" class="nav-item">
+        <router-link to="/posts" class="nav-item" @click="isMobileMenuOpen = false">
           <i class="bi bi-postcard-heart"></i> <span>Quản lý bài đăng</span>
         </router-link>
-        <router-link to="/team" class="nav-item">
+        <router-link to="/team" class="nav-item" @click="isMobileMenuOpen = false">
           <i class="bi bi-people-fill"></i> <span>Đội ngũ Sale</span>
         </router-link>
-        <router-link to="/revenue" class="nav-item">
+        <router-link to="/revenue" class="nav-item" @click="isMobileMenuOpen = false">
           <i class="bi bi-pie-chart-fill"></i> <span>Báo cáo doanh thu</span>
         </router-link>
       </nav>
@@ -45,7 +45,7 @@
             <p class="role">Intern Student</p>
           </div>
         </div>
-        <button class="btn-logout desktop-only">
+        <button class="btn-logout">
           <i class="bi bi-box-arrow-right"></i> <span>Đăng xuất</span>
         </button>
       </div>
@@ -55,7 +55,7 @@
     <nav class="bottom-nav">
       <router-link to="/" class="bottom-nav-item">
         <i class="bi bi-speedometer2"></i>
-        <span>Home</span>
+        <span>Dashboard</span>
       </router-link>
       <router-link to="/posts" class="bottom-nav-item">
         <i class="bi bi-postcard-heart"></i>

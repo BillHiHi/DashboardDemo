@@ -283,6 +283,7 @@ function getInitials(name) {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  gap: 20px;
 }
 .page-header h2 { font-size: 24px; font-weight: 800; margin: 0 0 4px 0; }
 .page-header p { color: #64748b; margin: 0; font-size: 14px; }
@@ -291,6 +292,7 @@ function getInitials(name) {
   background: #3b82f6; color: white; border: none; padding: 10px 20px;
   border-radius: 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;
   cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2); transition: all 0.2s;
+  white-space: nowrap;
 }
 .btn-add:hover { background: #2563eb; transform: translateY(-1px); }
 
@@ -314,8 +316,20 @@ function getInitials(name) {
 .content-grid {
   display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px;
 }
-@media (max-width: 1024px) {
+
+@media (max-width: 1200px) {
   .content-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .card {
@@ -343,7 +357,7 @@ function getInitials(name) {
 .top-3 .rank-badge { background: #f3e8ff; color: #7e22ce; }
 
 .member-content { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-.member-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.member-top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 
 .avatar {
   width: 32px; height: 32px; background: #f1f5f9; color: #64748b;
@@ -364,7 +378,12 @@ function getInitials(name) {
 .top-3 .fill { background: #8b5cf6; }
 
 /* HISTORY TABLE */
-.modern-table { width: 100%; border-collapse: collapse; }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.modern-table { width: 100%; border-collapse: collapse; min-width: 600px; }
 .min-w-100 { min-width: 100px; }
 .modern-table th {
   text-align: left; background: #f8fafc; padding: 12px 16px;
@@ -380,11 +399,13 @@ function getInitials(name) {
 /* MODAL & FORM */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center; z-index: 1000;
+  display: flex; align-items: center; justify-content: center; z-index: 2000;
 }
 .modal-content {
-  background: white; width: 90%; max-width: 500px; border-radius: 20px; padding: 24px;
+  background: white; width: 95%; max-width: 500px; border-radius: 20px; padding: 24px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .modal-header h3 { margin: 0; font-size: 18px; font-weight: 700; }
@@ -392,10 +413,16 @@ function getInitials(name) {
 
 .form-group { margin-bottom: 16px; }
 .form-row { display: flex; gap: 16px; }
+
+@media (max-width: 480px) {
+  .form-row { flex-direction: column; gap: 0; }
+}
+
 .form-group.half { flex: 1; }
 .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #334155; }
 .form-group input, .form-group select {
   width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: #f8fafc;
+  box-sizing: border-box;
 }
 .form-group input:focus, .form-group select:focus {
   outline: none; border-color: #3b82f6; background: white;

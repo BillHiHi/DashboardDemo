@@ -209,24 +209,24 @@ function savePost() {
   background-color: #f8fafc;
   font-family: 'Plus Jakarta Sans', sans-serif;
   min-height: 100vh;
-  margin-left: -200px;
+  width: 100%;
 }
 
 /* MAIN CONTENT WRAPPER */
 .main-wrapper {
-  /* margin-left nên khớp với độ rộng sidebar của bạn */
-  margin-left: 260px; 
   flex: 1;
   padding: 32px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* CONTAINER NỘI DUNG CHÍNH */
 .main-content {
   width: 100%;
-  max-width: 1400px; /* Tăng nhẹ để không gian thoáng hơn */
-  margin: 0; /* Bỏ margin auto để nội dung bám trái */
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* HEADER */
@@ -235,6 +235,7 @@ function savePost() {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  gap: 20px;
 }
 .header-text h1 {
   font-size: 24px;
@@ -262,6 +263,7 @@ function savePost() {
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  white-space: nowrap;
 }
 .btn-add-post:hover {
   background: #2563eb;
@@ -271,7 +273,7 @@ function savePost() {
 /* KPI CARDS */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
@@ -296,6 +298,7 @@ function savePost() {
   font-size: 11px;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
+  display: block;
 }
 .kpi-info h2 {
   font-size: 32px;
@@ -322,6 +325,7 @@ function savePost() {
   padding: 24px;
   border-radius: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 .data-card h3 {
   font-size: 16px;
@@ -389,9 +393,17 @@ function savePost() {
   padding: 4px 10px;
   border-radius: 20px;
 }
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .modern-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 500px;
 }
 .modern-table th {
   text-align: left;
@@ -427,9 +439,27 @@ function savePost() {
 .text-end { text-align: right; }
 
 /* RESPONSIVE */
-@media (max-width: 1024px) {
-  .main-wrapper { margin-left: 0; }
-  .content-grid { grid-template-columns: 1fr; }
+@media (max-width: 1200px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-wrapper {
+    padding: 20px;
+  }
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-add-post {
+    width: 100%;
+    justify-content: center;
+  }
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* MODAL STYLES */
@@ -444,7 +474,7 @@ function savePost() {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
   animation: fadeIn 0.2s ease-out;
 }
 .modal-content {
@@ -455,6 +485,7 @@ function savePost() {
   padding: 24px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 .modal-header {
   display: flex;
@@ -503,6 +534,7 @@ function savePost() {
   font-family: inherit;
   transition: all 0.2s;
   background: #f8fafc;
+  box-sizing: border-box;
 }
 .form-group input:focus,
 .form-group select:focus {

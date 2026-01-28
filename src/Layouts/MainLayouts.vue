@@ -259,7 +259,11 @@ const isMobileMenuOpen = ref(false)
   transform: translateY(-2px);
 }
 
-.bottom-nav-item.router-link-active span {
+.bottom-nav-item.router-link-active:not(.router-link-exact-active) {
+  color: #94a3b8 !important;
+}
+
+.bottom-nav-item.router-link-exact-active span {
   font-weight: 800;
 }
 

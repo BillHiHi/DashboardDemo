@@ -245,6 +245,7 @@ function getInitials(name) {
   padding: 32px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: #1e293b;
+  width: 100%;
 }
 
 /* HEADER */
@@ -253,6 +254,7 @@ function getInitials(name) {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  gap: 20px;
 }
 .header-left h2 {
   font-size: 24px;
@@ -277,6 +279,7 @@ function getInitials(name) {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
   transition: all 0.2s;
+  white-space: nowrap;
 }
 .btn-add:hover {
   background: #2563eb;
@@ -296,6 +299,7 @@ function getInitials(name) {
   position: relative;
   flex: 1;
   max-width: 300px;
+  min-width: 200px;
 }
 .search-box i {
   position: absolute;
@@ -311,6 +315,7 @@ function getInitials(name) {
   border-radius: 10px;
   font-size: 14px;
   background: #f8fafc;
+  box-sizing: border-box;
 }
 .filters {
   display: flex;
@@ -331,11 +336,13 @@ function getInitials(name) {
   background: white;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
-  overflow:hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .modern-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 700px;
 }
 .modern-table th {
   background: #f8fafc;
@@ -437,11 +444,15 @@ function getInitials(name) {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+  .post-manager { padding: 20px; }
+  .manager-header { flex-direction: column; align-items: flex-start; }
+  .btn-add { width: 100%; justify-content: center; }
   .toolbar { flex-direction: column; align-items: stretch; }
   .filters { flex-direction: column; }
+  .search-box { max-width: none; }
 }
 
-/* MODAL & FORM STYLES (Copied & Adapted) */
+/* MODAL & FORM STYLES */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -450,15 +461,17 @@ function getInitials(name) {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
 }
 .modal-content {
   background: white;
-  width: 90%;
+  width: 95%;
   max-width: 500px;
   border-radius: 20px;
   padding: 24px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .modal-header {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
@@ -468,12 +481,18 @@ function getInitials(name) {
 
 .form-group { margin-bottom: 16px; }
 .form-row { display: flex; gap: 16px; }
+
+@media (max-width: 480px) {
+  .form-row { flex-direction: column; gap: 0; }
+}
+
 .form-group.half { flex: 1; }
 .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #334155; }
 .form-group input, .form-group select {
   width: 100%; padding: 10px;
   border: 1px solid #e2e8f0; border-radius: 10px;
   font-size: 14px; background: #f8fafc;
+  box-sizing: border-box;
 }
 .form-group input:focus, .form-group select:focus {
   outline: none; border-color: #3b82f6; background: white;

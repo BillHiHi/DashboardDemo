@@ -5,11 +5,11 @@
         
         <header class="main-header">
           <div class="header-text">
-            <h1>Thống kê Social Media</h1>
-            <p>Chào ngày mới! Đây là hiệu suất team của bạn.</p>
+            <h1>Social Media</h1>
+            <p>Hi Admin! Check your performance.</p>
           </div>
           <button class="btn-add-post" @click="showAddPostModal = true">
-            <i class="bi bi-plus-lg"></i> Thêm Post mới
+            <i class="bi bi-plus-lg"></i> <span>Add Post</span>
           </button>
         </header>
 

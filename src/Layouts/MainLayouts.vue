@@ -6,12 +6,14 @@
         <i class="bi bi-rocket-takeoff-fill"></i>
         <span>MKT TEAM</span>
       </div>
-      <button class="menu-toggle" @click="isMobileMenuOpen = !isMobileMenuOpen">
-        <i class="bi" :class="isMobileMenuOpen ? 'bi-x-lg' : 'bi-list'"></i>
-      </button>
+      <div class="header-actions">
+        <button class="profile-btn" @click="isMobileMenuOpen = !isMobileMenuOpen">
+          <div class="mini-avatar">AD</div>
+        </button>
+      </div>
     </header>
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (Mobile Profile / Extra Settings) -->
     <aside class="sidebar-fixed" :class="{ 'mobile-open': isMobileMenuOpen }">
       <div class="sidebar-header desktop-only">
         <div class="brand-logo">
@@ -20,17 +22,17 @@
         </div>
       </div>
 
-      <nav class="sidebar-nav">
-        <router-link to="/" class="nav-item" @click="isMobileMenuOpen = false">
+      <nav class="sidebar-nav desktop-only">
+        <router-link to="/" class="nav-item">
           <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
         </router-link>
-        <router-link to="/posts" class="nav-item" @click="isMobileMenuOpen = false">
+        <router-link to="/posts" class="nav-item">
           <i class="bi bi-postcard-heart"></i> <span>Quản lý bài đăng</span>
         </router-link>
-        <router-link to="/team" class="nav-item" @click="isMobileMenuOpen = false">
+        <router-link to="/team" class="nav-item">
           <i class="bi bi-people-fill"></i> <span>Đội ngũ Sale</span>
         </router-link>
-        <router-link to="/revenue" class="nav-item" @click="isMobileMenuOpen = false">
+        <router-link to="/revenue" class="nav-item">
           <i class="bi bi-pie-chart-fill"></i> <span>Báo cáo doanh thu</span>
         </router-link>
       </nav>
@@ -43,10 +45,33 @@
             <p class="role">Intern Student</p>
           </div>
         </div>
+        <button class="btn-logout desktop-only">
+          <i class="bi bi-box-arrow-right"></i> <span>Đăng xuất</span>
+        </button>
       </div>
     </aside>
 
-    <!-- OVERLAY FOR MOBILE -->
+    <!-- BOTTOM NAVIGATION (MOBILE ONLY) -->
+    <nav class="bottom-nav">
+      <router-link to="/" class="bottom-nav-item">
+        <i class="bi bi-speedometer2"></i>
+        <span>Home</span>
+      </router-link>
+      <router-link to="/posts" class="bottom-nav-item">
+        <i class="bi bi-postcard-heart"></i>
+        <span>Posts</span>
+      </router-link>
+      <router-link to="/team" class="bottom-nav-item">
+        <i class="bi bi-people-fill"></i>
+        <span>Team</span>
+      </router-link>
+      <router-link to="/revenue" class="bottom-nav-item">
+        <i class="bi bi-pie-chart-fill"></i>
+        <span>Sales</span>
+      </router-link>
+    </nav>
+
+    <!-- OVERLAY FOR MOBILE SIDEBAR -->
     <div v-if="isMobileMenuOpen" class="sidebar-overlay" @click="isMobileMenuOpen = false"></div>
 
     <!-- NỘI DUNG -->
@@ -80,7 +105,7 @@ const isMobileMenuOpen = ref(false)
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-header {
@@ -127,10 +152,6 @@ const isMobileMenuOpen = ref(false)
   color: white;
 }
 
-.nav-item i {
-  font-size: 18px;
-}
-
 .router-link-active {
   background: #3b82f6 !important;
   color: white !important;
@@ -140,6 +161,29 @@ const isMobileMenuOpen = ref(false)
 .sidebar-footer {
   padding: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn-logout {
+  background: rgba(244, 63, 94, 0.1);
+  color: #fb7185;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: #f43f5e;
+  color: white;
 }
 
 .admin-profile {
@@ -160,18 +204,8 @@ const isMobileMenuOpen = ref(false)
   font-weight: 700;
 }
 
-.info .name {
-  color: white;
-  font-size: 14px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.info .role {
-  color: #64748b;
-  font-size: 12px;
-  margin: 0;
-}
+.info .name { color: white; font-size: 14px; font-weight: 700; margin: 0; }
+.info .role { color: #64748b; font-size: 12px; margin: 0; }
 
 /* MAIN CONTENT */
 .main-wrapper {
@@ -182,14 +216,53 @@ const isMobileMenuOpen = ref(false)
   box-sizing: border-box;
 }
 
-/* MOBILE HEADER & ADAPTATIONS */
-.mobile-header {
+/* BOTTOM NAVIGATION */
+.bottom-nav {
   display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px;
 }
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  gap: 4px;
+  flex: 1;
+  transition: all 0.2s;
+}
+
+.bottom-nav-item i {
+  font-size: 20px;
+}
+
+.bottom-nav-item.router-link-active {
+  color: #3b82f6;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* MOBILE HEADER & ADAPTATIONS */
+.mobile-header { display: none; }
 
 @media (max-width: 1024px) {
   .sidebar-fixed {
     transform: translateX(-100%);
+    width: 260px;
   }
   
   .sidebar-fixed.mobile-open {
@@ -198,50 +271,57 @@ const isMobileMenuOpen = ref(false)
 
   .main-wrapper {
     margin-left: 0;
-    padding: 24px;
-    padding-top: 100px; /* Space for fixed mobile header */
+    padding: 20px;
+    padding-top: 80px;
+    padding-bottom: 90px;
   }
 
   .mobile-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    background: #0f172a;
+    padding: 12px 20px;
+    background: #ffffff;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 900;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e2e8f0;
   }
 
-  .menu-toggle {
+  .brand-logo { color: #0f172a; font-size: 18px; }
+
+  .bottom-nav { display: flex; }
+
+  .desktop-only { display: none; }
+
+  .mini-avatar {
+    width: 32px;
+    height: 32px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .profile-btn {
     background: none;
     border: none;
-    color: white;
-    font-size: 24px;
     cursor: pointer;
-    padding: 8px;
-  }
-
-  .desktop-only {
-    display: none;
+    padding: 0;
   }
 
   .sidebar-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(15, 23, 42, 0.4);
     backdrop-filter: blur(4px);
     z-index: 950;
-  }
-}
-
-@media (max-width: 640px) {
-  .main-wrapper {
-    padding: 16px;
-    padding-top: 90px;
   }
 }
 </style>

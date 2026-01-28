@@ -152,7 +152,7 @@ const isMobileMenuOpen = ref(false)
   color: white;
 }
 
-.router-link-active {
+.router-link-exact-active {
   background: #3b82f6 !important;
   color: white !important;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -252,7 +252,7 @@ const isMobileMenuOpen = ref(false)
   font-size: 22px;
 }
 
-.bottom-nav-item.router-link-active {
+.bottom-nav-item.router-link-exact-active {
   color: #3b82f6 !important;
   background: none !important;
   box-shadow: none !important;

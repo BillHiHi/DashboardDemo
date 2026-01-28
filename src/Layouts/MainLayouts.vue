@@ -253,7 +253,7 @@ const isMobileMenuOpen = ref(false)
 }
 
 .bottom-nav-item.router-link-active {
-  color: #3b82f6;
+  color: #3b82f6 !important;
   background: none !important;
   box-shadow: none !important;
   transform: translateY(-2px);
